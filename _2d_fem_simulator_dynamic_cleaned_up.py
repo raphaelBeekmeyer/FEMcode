@@ -172,10 +172,10 @@ def triangularMeshFEM(tm_nodes, tm_elements):
     while i < len(tm_nodes):
         if len(tm_nodes[i]) > 0:
             num_nodes = num_nodes + 1
-            coords.append([tm_nodes[i][0], tm_nodes[i][1]])
-            loads.append([tm_nodes[i][5], tm_nodes[i][6]])
-            supports.append([tm_nodes[i][7], tm_nodes[i][8]])
-            node_directions.append([j*2, j*2+1])
+            coords.append([tm_nodes[i][0], tm_nodes[i][1]]) #node coordanites
+            loads.append([tm_nodes[i][5], tm_nodes[i][6]]) #node loads
+            supports.append([tm_nodes[i][7], tm_nodes[i][8]]) #if the node is supported or not
+            node_directions.append([j*2, j*2+1]) #reference to where the x and y direction of each node is (e.g. in a global matrix)
             node_index.append(j)
             j = j + 1
         i = i + 1
@@ -194,15 +194,19 @@ def triangularMeshFEM(tm_nodes, tm_elements):
     while i < len(tm_elements):
         if len(tm_nodes[tm_elements[i][0]]) > 0 and len(tm_nodes[tm_elements[i][1]]) > 0 and len(tm_nodes[tm_elements[i][2]]) > 0:
 
+            #add the nodes for this triangle to a connectivity matrix
             connectivity.append([node_index[tm_elements[i][0]], node_index[tm_elements[i][1]], node_index[tm_elements[i][2]]])
-            nodes_for_this_element = (connectivity[len(connectivity)-1][0], connectivity[len(connectivity)-1][1], connectivity[len(connectivity)-1][2])
+            #get the index of each node in this triangle
+            nodes_for_this_element = (connectivity[len(connectivity)-1][0], connectivity[len(connectivity)-1][1], connectivity[len(connectivity)-1][2]) 
+            #add degrees of freedom for each node in this triangle to dofs
             dofs.append([node_directions[nodes_for_this_element[0]][0], node_directions[nodes_for_this_element[0]][1], node_directions[nodes_for_this_element[1]][0], node_directions[nodes_for_this_element[1]][1], node_directions[nodes_for_this_element[2]][0], node_directions[nodes_for_this_element[2]][1]])
 
+            #get distances between nodes for calculation purposes (e.g. determinant)
+            #for coords[nodes_for_this_element[A]][B], A is the node (0, 1, 2) and B is whether or not you want the x (0) or y (1) value
             x13 = coords[nodes_for_this_element[0]][0] - coords[nodes_for_this_element[2]][0]
             x23 = coords[nodes_for_this_element[1]][0] - coords[nodes_for_this_element[2]][0]
             y13 = coords[nodes_for_this_element[0]][1] - coords[nodes_for_this_element[2]][1]
             y23 = coords[nodes_for_this_element[1]][1] - coords[nodes_for_this_element[2]][1]
-
             y31 = coords[nodes_for_this_element[2]][1] - coords[nodes_for_this_element[0]][1]
             y12 = coords[nodes_for_this_element[0]][1] - coords[nodes_for_this_element[1]][1]
             x32 = coords[nodes_for_this_element[2]][0] - coords[nodes_for_this_element[1]][0]
@@ -226,7 +230,7 @@ def triangularMeshFEM(tm_nodes, tm_elements):
             m_local = t*A*density*rawmassmatrix/12 #local mass matrix
 
             j = 0
-            k = len(dofs)-1 #this adds values from local stiffness matrix and local mass matrix values to their global counterparts
+            k = len(dofs)-1 #this adds values from local stiffness matrix and local mass matrix values to their global counterparts using dofs
             while j < 6:
                 stiffness_global[int(dofs[k][j])][int(dofs[k][0])] += k_local[j][0]
                 stiffness_global[int(dofs[k][j])][int(dofs[k][1])] += k_local[j][1]
