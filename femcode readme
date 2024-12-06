@@ -35,7 +35,7 @@ t - material thickness
 This is also the format that material properties are listed on at the top right of the screen; material name and color are included at the start as well.
 
 	'construct mesh (fineness, max # of nodes)'
-Use this to turn the polygons into a mesh. Meshing options are:
+Use this to turn the polygons into a mesh. Make sure that the object is fully within the screen before using this and is not obstructed by text or buttons. It is recommended to first construct the mesh and then pan/zoom the screen around using right click or the scroll wheel. Meshing options are:
 
 fineness - the distance between adjacent nodes in the mesh. 30 or 10 are recommended.
 max # of nodes - the maximum number of points that will be generated. limit of 1000 is recommended.
