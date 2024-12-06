@@ -1,0 +1,131 @@
+README
+
+This document is meant to help navigate the FEM simulator options. Some options are listed with parentheses; this indicates a box that can be typed in, with the content inside the parenthesis being the format that options should be typed in. 
+
+INSTALLATION:
+
+Unzip the .zip file, open the folder and open the application. Make sure the _internal folder is in the folder with the executable or it will not run.
+
+OPTIONS:
+
+	'reset everything'
+This resets the simulation back to the initial state it was in on startup.
+
+	'create polygon'
+Left click on this to go into polygon creation mode. You can left click on the black background to create polygon points. The polygon will show up after at least three points have been created. Click a different button to finish drawing the polygon. 
+
+The polygon will be created according to the currently selected materials. Materials available are shown in the top right, along with their properties and the current material is highlighted in yellow.
+
+	'change material (material #)'
+Left click on this, type an integer, and press enter. This will change the material that 'create polygon' creates. For example, type '0' to select the 'void' material, type '1' to select the default material, etc.
+
+	'create new material type (E, ν, ρ, κ, h, c, α, αdamping, βdamping, t)'
+Use this to add a new material to the list of material types. Properties to enter are:
+
+E - youngs modulus
+ν - poisson ratio
+ρ - density
+κ - thermal conductivity
+h - heat transfer coefficient
+c - heat capacity
+α - thermal expansion coefficient
+αdamping and βdamping - damping factors (set to zero to turn damping off)
+t - material thickness
+
+This is also the format that material properties are listed on at the top right of the screen; material name and color are included at the start as well.
+
+	'construct mesh (fineness, max # of nodes)'
+Use this to turn the polygons into a mesh. Meshing options are:
+
+fineness - the distance between adjacent nodes in the mesh. 30 or 10 are recommended.
+max # of nodes - the maximum number of points that will be generated. limit of 1000 is recommended.
+
+NOTE: The meshing algorithm can only approximate the object and as such is prone to occasional mistakes. If it constructs a mesh with a lone point disconnected from other points, the simulator will not be able to simulate the object. Click 'reset everything' and try again. 
+
+	'selection mode'
+Allows you to create a selection rectangle to select nodes using the mouse.
+
+	'set properties of selection nodes (dx, dy, Fx, Fy, T, flux, fixed T, fixed dx, fixed dy)'
+To be used in conjunction with 'selection mode'. This is how boundary conditions are defined for meshed objects. Properties to enter are:
+
+dx - horizontal displacement
+dy - vertical displacement
+Fx - horizontal load
+Fy - vertical load
+T - temperature
+flux - heat flux
+fixed T - are the temperatures fixed for these nodes? set to 1 for yes, 0 for no.
+fixed dx - are the horizontal displacements fixed for these nodes? set to 1 for yes, 0 for no.
+fixed dy - are the vertical displacements fixed for these nodes? set to 1 for yes, 0 for no.
+
+	'change simulation properties (airtemp)'
+Use this to change the ambient temperature of the simulation. Temperature default is 0. Used for convection problems.
+
+	'run simulation'
+This starts the physics simulation. The software will run the finite element simulation of the meshed object. Timestep is set to 0.1 seconds. The simulator will also output a static solution for the simulation in the console.
+
+	'set # of iterations per program tick (1 = normal speed)'
+This can be used to quickly speed up the simulation. It is set to 1 by default; 2 or 3 will speed it up by 2x or 3x respectively. Be careful inserting large numbers into this as it will cause considerable lag.
+
+	'display type (property to display)'
+This can be used to change what property each triangular element in the mesh displays. Set to an integer:
+
+0 - displays the kind of material by color. This is the default.
+1 - displays horizontal strain.
+2 - displays vertical strain.
+3 - displays temperature.
+
+	'show/hide points'
+This can be used to show or hide points for added visibility.
+
+	'direct input (input type, (parameters...))'
+This can be used to directly input data into the simulator and is useful for creating demos with precise numbers. Several kinds of data can be inserted into the software depending on the 'input type':
+
+preset - used to load preset data into the software to simulate immediately. has a single parameter, which is the demo ID number.
+point - used to add a single node to the software. uses the same parameters as 'set properties of selection nodes', but the x and y coordanite are also parameters at the beginning of the list.
+element - used to add a single element to the software. parameters are (node 1, node 2, node 3, material ID number). nodes should be in counterclockwise order.
+side - used to add a single side to the software for convection purposes. parameters are (node 1, node 2).
+material - used to add a new material to the software. parameters are the same as 'create new material type'.
+
+PRESETS:
+
+This software has multiple preset simulations for demo purposes. The following is a list of preset IDs that can be typed into 'direct input':
+
+preset, 1 - example 6.2 from the textbook.
+preset, 2 - example 13.6 from the textbook.
+preset, 3 - example 15.5 from the textbook.
+preset, 4 - two trapezoids with no boundary conditions on them
+preset, 5 - simulation of two trapezoids with the same material properties, with different loads on top.
+preset, 6 - simulation of two trapezoids with the same load on top, different youngs modulus.
+preset, 7 - simulation of two trapezoids with the same load on top, different damping ratios.
+preset, 8 - simulation of two cold trapezoids heating up with different thermal conductivities.
+preset, 9 - simulation of two hot trapezoids cooling down with different coefficients of thermal expansion. 
+preset, 10 - simulation of two cold trapezoids heating up with different heat capacities.
+
+ADDITIONAL NOTES:
+
+Some other controls not mentioned above are as follows:
+
+RIGHT CLICK - used to pan the view of the screen
+SCROLL WHEEL - used to zoom in and out
+
+Nodes can also be moused over and will display some of their properties at the bottom of the screen for debugging purposes. This can be useful to get the temperature or displacement of an individual node.
+
+This software is sometimes prone to rounding errors that can give inaccurate values. For example, it erroneously predicts the y displacement of the 5th node in preset 3 to be 4.86449738e-20 meters when this value should reasonably be zero. Incidentally, this may be a common issue with finite element software, as the textbook gives an even less accurate value of 6.65470835e-09.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
